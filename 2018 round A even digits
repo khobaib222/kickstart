@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+using namespace std;
+int count_digits(long long n){
+    int i=1;
+    while(true){
+        if((n/(long long)pow(10,i))==0)
+            return i;
+        i++;
+    }
+}
+long long string_to_integer(string s){
+	int digits = s.length()-1;
+	long long num = 0;
+	int i=0;
+	while(digits>-1){
+		num += (s[i]-48)*(long long)pow(10,digits);
+		digits--;
+		i++;	
+	}
+	return num;
+}
+long long make_number(int digits){
+    long long num=0;
+    for(int i=digits-1;i>-1;i--){
+        num += (long long)pow(10,i) * 4;
+    }
+    return num;
+}
+long long solve(long long n,int digits){
+    if(n==1)
+        return 1;
+    else{
+        string k = to_string(n);
+        int i=0;
+        int z = k.length();
+        while(i<z){
+            int d = k[i]-48;
+            if(d%2){
+                if(digits==1 && d<10 && d>-1) return 1;
+                else{
+                    long long m = make_number(digits-1);
+                    long long num = string_to_integer(k.substr(i+1));
+                    if(num<=m||d==9){
+                        return num+(m/4)+1;
+                    }else return (long long)pow(10,digits-1) - string_to_integer(k.substr(i+1));
+                }
+            }
+            i++;
+            digits--;
+        }
+        return 0;
+    }
+}
+int main(){
+    int t;
+    cin>>t;
+    long long n;
+    for(int i=1;i<=t;i++){
+        cin>>n;
+        int d = count_digits(n);
+        cout<<"Case #"<<i<<": "<<solve(n,d)<<endl;
+    }
+    return 0;
+}
